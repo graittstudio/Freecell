@@ -85,7 +85,7 @@ stempel(www);
 fs.writeFileSync(path.join(www, 'versie.json'), JSON.stringify(versieInfo(), null, 2));
 
 /* ---- de webversie ---- */
-function web(doel) {
+function web(doel, eigenAdres) {
   leeg(doel);
   kopieer(doel, LANDING);
   if (fs.existsSync(path.join(wortel, LOGO))) {
@@ -105,6 +105,15 @@ function web(doel) {
   stempel(spel);
 
   fs.writeFileSync(path.join(doel, '.nojekyll'), '');
+  /*
+   * Het eigen adres moet de bouw overleven (16-09-2026).
+   *
+   * GitHub Pages leest het domein uit een bestand CNAME in de map die hij
+   * serveert. Die map wordt hier elke keer leeggegooid, dus zonder deze regel
+   * verdwijnt freecell.graittstudio.com bij de volgende release -- en dat merk
+   * je pas als iemand de link probeert.
+   */
+  if (eigenAdres) fs.writeFileSync(path.join(doel, 'CNAME'), eigenAdres);
   fs.writeFileSync(path.join(doel, 'versie.json'), JSON.stringify(versieInfo(), null, 2));
   fs.writeFileSync(path.join(doel, 'spelen', 'versie.json'), JSON.stringify(versieInfo(), null, 2));   // GitHub Pages: geen Jekyll
   fs.writeFileSync(path.join(doel, 'versie.txt'), versie + '\n');
@@ -120,12 +129,17 @@ function web(doel) {
   }
 }
 
-const doelen = [path.join(wortel, 'docs')];
+/*
+ * Alleen docs/ krijgt het CNAME-bestand: dat is de map die GitHub Pages
+ * serveert op freecell.graittstudio.com. De kopieen in graitt-site staan
+ * onder een ander adres en hebben er niets te zoeken.
+ */
+const doelen = [[path.join(wortel, 'docs'), 'freecell.graittstudio.com']];
 for (const site of ['D:/claude/graitt-site/deploy/freecell', 'D:/claude/graitt-site/freecell']) {
-  if (fs.existsSync(path.dirname(site))) doelen.push(site);
+  if (fs.existsSync(path.dirname(site))) doelen.push([site, null]);
 }
-doelen.forEach(web);
+for (const [doel, eigenAdres] of doelen) web(doel, eigenAdres);
 
 console.log(`FreeCell ${versie} gebouwd:`);
 console.log('  www/   (Android-app)');
-doelen.forEach((d) => console.log('  ' + path.relative(wortel, d).replace(/\\/g, '/')));
+doelen.forEach(([d]) => console.log('  ' + path.relative(wortel, d).replace(/\\/g, '/')));
