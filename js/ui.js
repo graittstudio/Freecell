@@ -495,7 +495,15 @@
   }
 
   /* ---------------- klikken en slepen ---------------- */
-  var drag = null, tapInfo = { t: 0, card: -1 };
+  var drag = null, tapInfo = { t: 0, card: -1 }, parkeer = { kaart: -1, t: 0 };
+
+  /* Kaart even laten schudden: hij gaat niet, maar je ziet dat hij je zag. */
+  function schud(c) {
+    var el = document.querySelector('#board .card[data-card="' + c + '"]');
+    if (!el) return;
+    el.classList.add('nomove');
+    setTimeout(function () { el.classList.remove('nomove'); }, 320);
+  }
 
   function pileOf(el) {
     var p = el.closest('[data-pile]');
@@ -591,11 +599,23 @@
     }
     tapInfo = { t: now, card: c0 };
     var dst = Eng.autoTarget(st, d.src);
-    if (dst) doMove(d.src, dst);
-    else {
+    if (dst) { parkeer = { kaart: -1, t: 0 }; doMove(d.src, dst); return; }
+
+    /* Niets op tafel en niets af te leggen. Vroeger schoof het spel de kaart
+       dan zelf in een vrije cel -- precies de zet waar je later spijt van
+       hebt. Nu vraagt hij het eerst. */
+    var cel = Eng.autoTarget(st, d.src, true);
+    if (cel && parkeer.kaart === c0 && now - parkeer.t < 3000) {
+      parkeer = { kaart: -1, t: 0 };
+      doMove(d.src, cel);
+      return;
+    }
+    schud(c0);
+    if (cel) {
+      parkeer = { kaart: c0, t: now };
+      toast('Deze kan nergens heen. Tik nog eens om hem in een vrije cel te parkeren.');
+    } else {
       sfx.bad();
-      var el2 = document.querySelector('#board .card[data-card="' + c0 + '"]');
-      if (el2) { el2.classList.add('nomove'); setTimeout(function () { el2.classList.remove('nomove'); }, 320); }
     }
   }
 

@@ -260,29 +260,69 @@ var Eng = (function () {
 
   function stuck(st) { return allMoves(st).length === 0; }
 
-  /* Beste doel voor een klik: aflegstapel > kolom > vrije cel */
-  function autoTarget(st, src) {
+  /* ---- waar hoort deze kaart heen als je erop tikt? -------------------
+     Vroeger kreeg elke passende kolom dezelfde waarde, dus won altijd de
+     meest linkse -- ook als die veel slechter was. En paste er niets, dan
+     verdween de kaart ongevraagd in een vrije cel. Nu wordt elke plek
+     gewogen, en een vrije cel moet je zelf vragen (tweede tik). */
+
+  /* Lengte van de nette aflopende reeks onderaan een kolom. */
+  function reeksOnderaan(col) {
+    var n = 1;
+    for (var k = col.length - 1; k > 0; k--) {
+      if (rank(col[k - 1]) === rank(col[k]) + 1 && !sameColor(col[k - 1], col[k])) n++;
+      else break;
+    }
+    return col.length ? n : 0;
+  }
+
+  function doelWaarde(st, src, cards, i) {
+    var col = st.cols[i], sc;
+
+    if (!col.length) {
+      // Een lege kolom is het kostbaarste wat je hebt: niet zomaar volgooien.
+      if (src.kind === 'col' && st.cols[src.i].length === cards.length) return -1e9;  // kolom verhuizen is zinloos
+      sc = 120;
+      if (emptyCols(st) <= 1) sc -= 70;                 // je laatste lege kolom hou je liever vrij
+      sc += Math.min(cards.length, 5) * 12;             // een hele reeks parkeren is nuttiger dan één kaart
+      if (src.kind === 'free') sc += 50;                // een cel leegmaken is altijd winst
+      return sc;
+    }
+
+    var top = col[col.length - 1];
+    sc = 300;
+    sc += Math.min(reeksOnderaan(col), 6) * 18;         // je bouwt verder aan een nette reeks
+    if (st.found[suit(top)].length === rank(top) - 1) sc -= 150;  // deze kaart kon net afgelegd worden
+    sc -= col.length * 4;                               // uit een korte kolom kom je makkelijker terug
+    if (src.kind === 'free') sc += 60;                  // kaart uit een cel halen is winst
+    return sc;
+  }
+
+  /* Beste doel voor een tik: aflegstapel > beste plek op tafel.
+     Een vrije cel telt alleen mee als erom gevraagd wordt (metCel). */
+  function autoTarget(st, src, metCel) {
     var cards = cardsOf(st, src);
     if (!cards.length) return null;
-    var c = cards[0], d;
+    var c = cards[0], d, i;
+
     if (cards.length === 1) {
       d = { kind: 'found', i: suit(c) };
       if (canMove(st, src, d)) return d;
     }
-    // kolom met passende kaart, liefst eentje die geen reeks kapotmaakt
-    var best = null, bestScore = -1;
-    for (var i = 0; i < 8; i++) {
+
+    var best = null, bestScore = -1e8;
+    for (i = 0; i < 8; i++) {
+      if (src.kind === 'col' && src.i === i) continue;
       d = { kind: 'col', i: i };
       if (!canMove(st, src, d)) continue;
-      var col = st.cols[i];
-      var sc = col.length ? 100 : 30;
-      if (src.kind === 'col' && st.cols[src.i].length === cards.length && !col.length) sc = -1; // kolom naar lege kolom
+      var sc = doelWaarde(st, src, cards, i);
       if (sc > bestScore) { bestScore = sc; best = d; }
     }
     if (best) return best;
-    if (cards.length === 1) {
-      for (var f = 0; f < 4; f++) {
-        d = { kind: 'free', i: f };
+
+    if (metCel && cards.length === 1) {
+      for (i = 0; i < 4; i++) {
+        d = { kind: 'free', i: i };
         if (canMove(st, src, d)) return d;
       }
     }
@@ -294,6 +334,7 @@ var Eng = (function () {
     canMove: canMove, apply: apply, won: won, runLength: runLength, cardsOf: cardsOf,
     freeCount: freeCount, emptyCols: emptyCols, maxMove: maxMove,
     safeMoves: safeMoves, canAutoFinish: canAutoFinish, anyFoundationMove: anyFoundationMove,
-    bestMove: bestMove, stuck: stuck, autoTarget: autoTarget, isSafe: isSafe
+    bestMove: bestMove, stuck: stuck, autoTarget: autoTarget, isSafe: isSafe,
+    reeksOnderaan: reeksOnderaan, doelWaarde: doelWaarde
   };
 })();

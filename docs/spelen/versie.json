@@ -1,12 +1,9 @@
 {
-  "versie": "1.5.0",
+  "versie": "1.6.0",
   "nieuws": [
-    "Nieuw niveau **Dummies**, onder Beginner: de allermakkelijkste spellen, alle tijd, en de lamp legt niet alleen uit wat je kunt doen maar zet die ene kaart meteen op de goede plek. De rest doe je zelf.",
-    "Samen spelen is duidelijker: één iemand maakt de club, de rest vult die code in. Zat je al in een club en krijg je een uitnodiging? Dan vraagt het spel of je wilt overstappen, in plaats van de link te negeren.",
-    "Je kunt nu ook overstappen naar een andere club zonder eerst te vertrekken.",
-    "Het spel meldt het als iemand uit je club jouw tijd op hetzelfde spel heeft verbeterd.",
-    "De dagpuzzel houdt bij hoeveel dagen op rij je hem haalt, met een doel bij drie dagen.",
-    "De telefoon trilt kort bij winst en bij een zet die niet kan (uit te zetten)."
+    "Tik je een kaart aan, dan kiest het spel nu echt de beste plek. Eerst ging hij altijd naar de meest linkse kolom die paste; nu kijkt hij of de kaart aansluit op een nette reeks, of de kolom kort is, en of hij er geen kaart mee begraaft die net kon worden afgelegd.",
+    "Een kaart belandt niet meer vanzelf in een vrije cel. Kan hij nergens heen, dan schudt hij even en vraagt het spel of je hem wilt parkeren: tik nog een keer en hij gaat in de cel. Slepen kan natuurlijk gewoon.",
+    "Een lege kolom wordt niet meer volgegooid met één kaart als het elders ook past — zeker je laatste lege kolom niet."
   ],
-  "apk": "FreeCell-1.5.0.apk"
+  "apk": "FreeCell-1.6.0.apk"
 }

@@ -4,6 +4,18 @@ Versienummer staat in `package.json` en wordt bij het bouwen overal ingevuld:
 in de app (versionName/versionCode), op de landingspagina en in de naam van de
 service-worker-cache.
 
+## 1.6.0 — 15 november 2026
+
+- Tik je een kaart aan, dan kiest het spel nu echt de beste plek. Eerst ging
+  hij altijd naar de meest linkse kolom die paste; nu kijkt hij of de kaart
+  aansluit op een nette reeks, of de kolom kort is, en of hij er geen kaart
+  mee begraaft die net kon worden afgelegd.
+- Een kaart belandt niet meer vanzelf in een vrije cel. Kan hij nergens heen,
+  dan schudt hij even en vraagt het spel of je hem wilt parkeren: tik nog een
+  keer en hij gaat in de cel. Slepen kan natuurlijk gewoon.
+- Een lege kolom wordt niet meer volgegooid met één kaart als het elders ook
+  past — zeker je laatste lege kolom niet.
+
 ## 1.5.0 — 6 september 2026
 
 - Nieuw niveau **Dummies**, onder Beginner: de allermakkelijkste spellen, alle
