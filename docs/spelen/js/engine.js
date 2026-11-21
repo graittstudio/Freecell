@@ -261,62 +261,79 @@ var Eng = (function () {
   function stuck(st) { return allMoves(st).length === 0; }
 
   /* ---- waar hoort deze kaart heen als je erop tikt? -------------------
-     Vroeger kreeg elke passende kolom dezelfde waarde, dus won altijd de
-     meest linkse -- ook als die veel slechter was. En paste er niets, dan
-     verdween de kaart ongevraagd in een vrije cel. Nu wordt elke plek
-     gewogen, en een vrije cel moet je zelf vragen (tweede tik). */
+     Niet gokken welke plek er aardig uitziet, maar doorrekenen: elke zet
+     wordt op een kopie uitgevoerd en het bord erna krijgt een cijfer. De
+     zet met het beste bord wint.
 
-  /* Lengte van de nette aflopende reeks onderaan een kolom. */
-  function reeksOnderaan(col) {
-    var n = 1;
-    for (var k = col.length - 1; k > 0; k--) {
-      if (rank(col[k - 1]) === rank(col[k]) + 1 && !sameColor(col[k - 1], col[k])) n++;
-      else break;
+     De wegingen hieronder zijn niet verzonnen maar nagemeten: met een
+     solver is voor 40 echte keuzemomenten uitgerekend hoeveel werk er na
+     elke mogelijke zet nog nodig was om te winnen. Zie TIKKEUZE.md. */
+
+  /* Hoeveel losse blokken liggen er boven positie j? Een nette aflopende
+     reeks telt als één blok: die gaat immers in één beweging weg. Tellen
+     per kaart (zoals eerder) maakte het neerleggen van een reeks kunstmatig
+     duur, waardoor alles naar lege kolommen vluchtte. */
+  function blokkenBoven(col, j) {
+    var blokken = 0;
+    for (var k = j + 1; k < col.length; k++) {
+      if (k === j + 1 ||
+          !(rank(col[k - 1]) === rank(col[k]) + 1 && !sameColor(col[k - 1], col[k]))) blokken++;
     }
-    return col.length ? n : 0;
+    return blokken;
   }
 
-  function doelWaarde(st, src, cards, i) {
-    var col = st.cols[i], sc;
+  /* Hoe goed staat het bord erbij? Hoger is beter. */
+  function bordWaarde(st) {
+    var w = 0, i, j, col, c, r, s, last;
 
-    if (!col.length) {
-      // Een lege kolom is het kostbaarste wat je hebt: niet zomaar volgooien.
-      if (src.kind === 'col' && st.cols[src.i].length === cards.length) return -1e9;  // kolom verhuizen is zinloos
-      sc = 120;
-      if (emptyCols(st) <= 1) sc -= 70;                 // je laatste lege kolom hou je liever vrij
-      sc += Math.min(cards.length, 5) * 12;             // een hele reeks parkeren is nuttiger dan één kaart
-      if (src.kind === 'free') sc += 50;                // een cel leegmaken is altijd winst
-      return sc;
+    for (i = 0; i < 4; i++) w += st.found[i].length * 60;   // afgelegd telt zwaar
+    w += emptyCols(st) * 50;                                // een lege kolom is goud waard
+    w += freeCount(st) * 20;                                // een vrije cel ook
+
+    for (i = 0; i < 8; i++) {
+      col = st.cols[i];
+      for (j = 0; j < col.length; j++) {
+        c = col[j]; r = rank(c); s = suit(c);
+        last = blokkenBoven(col, j);                        // wat ligt deze kaart in de weg
+        if (st.found[s].length === r - 1) w -= last * 10;   // kaart die nu aan de beurt is
+        else if (r <= 5) w -= (6 - r) * last;               // lage kaarten wil je vrij houden
+        if (j > 0 && rank(col[j - 1]) === r + 1 && !sameColor(col[j - 1], c)) w += 25;  // nette reeks
+      }
     }
-
-    var top = col[col.length - 1];
-    sc = 300;
-    sc += Math.min(reeksOnderaan(col), 6) * 18;         // je bouwt verder aan een nette reeks
-    if (st.found[suit(top)].length === rank(top) - 1) sc -= 150;  // deze kaart kon net afgelegd worden
-    sc -= col.length * 4;                               // uit een korte kolom kom je makkelijker terug
-    if (src.kind === 'free') sc += 60;                  // kaart uit een cel halen is winst
-    return sc;
+    return w;
   }
 
-  /* Beste doel voor een tik: aflegstapel > beste plek op tafel.
-     Een vrije cel telt alleen mee als erom gevraagd wordt (metCel). */
+  /* Beste doel voor een tik. Een vrije cel telt alleen mee als erom
+     gevraagd wordt (de tweede tik). */
   function autoTarget(st, src, metCel) {
     var cards = cardsOf(st, src);
     if (!cards.length) return null;
     var c = cards[0], d, i;
 
+    // Een kaart die veilig kan worden afgelegd, gaat altijd meteen weg: dat
+    // is nooit fout en het blijft voorspelbaar.
     if (cards.length === 1) {
       d = { kind: 'found', i: suit(c) };
-      if (canMove(st, src, d)) return d;
+      if (canMove(st, src, d) && isSafe(st, c)) return d;
     }
 
-    var best = null, bestScore = -1e8;
+    var best = null, bestW = -1e8;
+    function weeg(dst) {
+      if (!canMove(st, src, dst)) return;
+      var na = clone(st);
+      if (!apply(na, src, dst)) return;
+      var w = bordWaarde(na);
+      if (dst.kind === 'found') w += 8;                     // bij twijfel liever afleggen
+      if (src.kind === 'free') w += 15;                     // een cel leegmaken is prettig
+      if (w > bestW) { bestW = w; best = dst; }
+    }
+
+    if (cards.length === 1) weeg({ kind: 'found', i: suit(c) });
     for (i = 0; i < 8; i++) {
       if (src.kind === 'col' && src.i === i) continue;
-      d = { kind: 'col', i: i };
-      if (!canMove(st, src, d)) continue;
-      var sc = doelWaarde(st, src, cards, i);
-      if (sc > bestScore) { bestScore = sc; best = d; }
+      // een hele kolom naar een lege kolom verhuizen levert niets op
+      if (!st.cols[i].length && src.kind === 'col' && st.cols[src.i].length === cards.length) continue;
+      weeg({ kind: 'col', i: i });
     }
     if (best) return best;
 
@@ -335,6 +352,6 @@ var Eng = (function () {
     freeCount: freeCount, emptyCols: emptyCols, maxMove: maxMove,
     safeMoves: safeMoves, canAutoFinish: canAutoFinish, anyFoundationMove: anyFoundationMove,
     bestMove: bestMove, stuck: stuck, autoTarget: autoTarget, isSafe: isSafe,
-    reeksOnderaan: reeksOnderaan, doelWaarde: doelWaarde
+    bordWaarde: bordWaarde, blokkenBoven: blokkenBoven, allMoves: allMoves
   };
 })();

@@ -4,6 +4,20 @@ Versienummer staat in `package.json` en wordt bij het bouwen overal ingevuld:
 in de app (versionName/versionCode), op de landingspagina en in de naam van de
 service-worker-cache.
 
+## 1.7.0 — 21 november 2026
+
+- Een tik zet de kaart nu echt op de beste plek. De vorige poging werkte met
+  bedachte vuistregels en bleek bij nameten juist slechter dan de versie
+  daarvoor: van de 36 beoordeelde keuzemomenten koos hij er maar 9 goed. Nu
+  wordt elke mogelijke zet doorgerekend op een kopie van het bord en wint de
+  stand die daarna het gunstigst is — dat is ongeveer twee keer zo vaak raak.
+- De grootste fout zat in het afstraffen van "begraven": een nette reeks van
+  vijf kaarten ergens op leggen telde vijf keer zo zwaar als één kaart,
+  terwijl zo'n reeks in één beweging weer weg kan. Daardoor schoof het spel
+  reeksen naar lege kolommen in plaats van op de passende kaart.
+- Hoe dat is nagemeten staat in docs/tikkeuze.md, met het gereedschap in
+  scripts/meten erbij.
+
 ## 1.6.0 — 15 november 2026
 
 - Tik je een kaart aan, dan kiest het spel nu echt de beste plek. Eerst ging
