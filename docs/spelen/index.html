@@ -17,20 +17,25 @@
 
 <div id="app">
   <header id="topbar">
-    <button class="round" id="btn-settings" aria-label="Instellingen">&#9881;</button>
+    <button class="knik" id="btn-menu" aria-label="Menu openen" aria-expanded="false" aria-controls="ov-menu">
+      <span class="knik-lijn boven"></span>
+      <span class="knik-lijn midden"></span>
+      <span class="knik-lijn onder"></span>
+    </button>
     <div class="stat"><span class="lbl">Score</span><span class="val" id="stat-score">0</span></div>
     <div class="stat"><span class="lbl">Tijd</span><span class="val" id="stat-time">0:00</span></div>
     <div class="stat"><span class="lbl">Zetten</span><span class="val" id="stat-moves">0</span></div>
-    <button class="round" id="btn-goals" aria-label="Doelen">&#9733;</button>
+    <button class="round ik-knop" id="btn-ik-top" aria-label="Jouw gegevens">
+      <span class="avatar mini" id="ik-avatar"></span>
+    </button>
   </header>
 
-  <div id="subbar">
-    <button class="pill pill-ik" id="pill-ik"><span class="avatar mini" id="ik-avatar"></span><span id="ik-naam">Speler</span></button>
-    <button class="pill" id="pill-level">Beginner &middot; trede 1</button>
-    <button class="pill" id="pill-deal">Spel #1</button>
-    <button class="pill" id="pill-rank">Ranglijst</button>
-    <button class="pill" id="pill-spelers" title="Hoeveel mensen spelen dit spel?">🌍 <span id="spelers-nu">–</span></button>
-    <span class="pill ghost" id="pill-pb"></span>
+  <div id="subbar" aria-live="polite">
+    <span class="status" id="pill-level">Beginner &middot; trede 1</span>
+    <span class="status" id="pill-deal">Spel #1</span>
+    <span class="status" id="pill-rank"></span>
+    <span class="status zacht" id="pill-pb"></span>
+    <span id="ik-naam" hidden></span>
   </div>
 
   <main id="board">
@@ -97,6 +102,23 @@
       <span>gemaakt door <b>grAItt Studio</b></span>
     </a>
   </div>
+</div>
+
+<div class="overlay menu" id="ov-menu">
+  <nav class="menupaneel" aria-label="Hoofdmenu">
+    <button class="menu-item" id="menu-ik"><span class="mi">👤</span><span>Jouw gegevens &amp; weergave</span></button>
+    <button class="menu-item" id="menu-board"><span class="mi">🏆</span><span>Ranglijst</span></button>
+    <button class="menu-item" id="menu-goals"><span class="mi">⭐</span><span>Doelen</span></button>
+    <button class="menu-item" id="menu-new"><span class="mi">🃏</span><span>Nieuw spel</span></button>
+    <button class="menu-item" id="menu-spelers"><span class="mi">🌍</span><span>Wie spelen dit spel</span>
+      <span class="mi-tel" id="spelers-nu">–</span></button>
+    <button class="menu-item" id="menu-settings"><span class="mi">⚙️</span><span>Alle instellingen</span></button>
+    <a class="menu-item" id="menu-uitleg" href="../" target="_blank" rel="noopener"><span class="mi">❓</span><span>Uitleg &amp; app</span></a>
+    <a class="maker menu-maker" href="https://graittstudio.com" target="_blank" rel="noopener">
+      <img src="icons/graitt-logo.png" alt="grAItt Studio">
+      <span>gemaakt door <b>grAItt Studio</b></span>
+    </a>
+  </nav>
 </div>
 
 <div class="overlay boven" id="ov-foto">

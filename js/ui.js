@@ -801,20 +801,15 @@
   }
 
   function toonSpelers() {
-    var pil = $('pill-spelers');
-    if (spelers.nu === null) { pil.style.display = 'none'; return; }
-    pil.style.display = '';
-    $('spelers-nu').textContent = spelers.nu;
+    if (spelers.nu === null) return;
+    var tel = $('spelers-nu');
+    if (tel) tel.textContent = spelers.nu;
     $('tel-nu').textContent = spelers.nu;
     $('tel-vandaag').textContent = spelers.vandaag;
     $('tel-week').textContent = spelers.week;
     $('tel-totaal').textContent = spelers.totaal;
   }
 
-  $('pill-spelers').onclick = function () {
-    telSpelers(true);
-    open('ov-spelers');
-  };
   setInterval(function () { if (!document.hidden) telSpelers(false); }, 120000);
   setTimeout(function () { telSpelers(true); }, 2000);
 
@@ -927,6 +922,7 @@
   function open(id) {
     document.querySelectorAll('.overlay.on').forEach(function (o) { o.classList.remove('on'); });
     $(id).classList.add('on');
+    zetMenuKnop(id === 'ov-menu');
     if (id !== 'ov-win') pauseTimer();
     if (id === 'ov-board') {
       if (heeftClub() && !$('lb-scope').dataset.gekozen) {
@@ -943,6 +939,7 @@
   function close() {
     if (!P.naam && $('ov-hallo').classList.contains('on')) { $('hallo-naam').focus(); return; }
     document.querySelectorAll('.overlay.on').forEach(function (o) { o.classList.remove('on'); });
+    zetMenuKnop(false);
     clearInterval(lbTimer); lbTimer = null;
     if (!finished && st && st.moves > 0) startTimerIfNeeded();
   }
@@ -1287,7 +1284,6 @@
   });
   function profielGewijzigd() {
     Store.saveProfiel();
-    $('pill-ik').style.display = P.naam ? '' : 'none';
     zetAvatar($('set-avatar'), naam(), P.foto, true);
     zetAvatar($('ik-avatar'), naam(), P.foto, true);
     $('ik-naam').textContent = naam();
@@ -1301,7 +1297,7 @@
   $('set-avatar').onclick = function () { kiesFoto(profielGewijzigd); };
   $('btn-foto').onclick = function () { kiesFoto(profielGewijzigd); };
   $('btn-foto-weg').onclick = function () { P.foto = ''; profielGewijzigd(); toast('Foto weggehaald'); };
-  $('pill-ik').onclick = function () { renderIk(); open('ov-ik'); };
+
   ['autoplay', 'sound', 'anim', 'lefty', 'trillen'].forEach(function (k) {
     $('set-' + k).addEventListener('change', function () {
       S[k] = this.checked; Store.saveSettings(); applyLook();
@@ -1338,11 +1334,26 @@
   });
 
   /* ---------------- knoppen ---------------- */
-  $('btn-settings').onclick = function () { renderSettings(); open('ov-settings'); };
-  $('btn-goals').onclick = function () { renderGoals(); open('ov-goals'); };
-  $('pill-level').onclick = function () { renderLadderUI(); open('ov-new'); };
-  $('pill-deal').onclick = function () { renderLadderUI(); open('ov-new'); };
-  $('pill-rank').onclick = function () { open('ov-board'); };
+  /* ---- hamburgermenu (De Knik) ----
+     De stand van de knop volgt het menu zelf, dus ook als het sluit via
+     Escape, een menukeuze of een tik naast het paneel. */
+  function zetMenuKnop(open) {
+    var k = $('btn-menu');
+    k.setAttribute('aria-expanded', open ? 'true' : 'false');
+    k.setAttribute('aria-label', open ? 'Menu sluiten' : 'Menu openen');
+  }
+  $('btn-menu').onclick = function () {
+    if ($('ov-menu').classList.contains('on')) { close(); return; }
+    telSpelers(false);
+    open('ov-menu');
+  };
+  $('menu-ik').onclick = function () { renderIk(); open('ov-ik'); };
+  $('menu-board').onclick = function () { open('ov-board'); };
+  $('menu-goals').onclick = function () { renderGoals(); open('ov-goals'); };
+  $('menu-new').onclick = function () { renderLadderUI(); open('ov-new'); };
+  $('menu-spelers').onclick = function () { telSpelers(true); open('ov-spelers'); };
+  $('menu-settings').onclick = function () { renderSettings(); open('ov-settings'); };
+  $('btn-ik-top').onclick = function () { renderIk(); open('ov-ik'); };
   $('btn-new').onclick = function () { renderLadderUI(); open('ov-new'); };
   $('btn-board').onclick = function () { open('ov-board'); };
   $('btn-hint').onclick = hint;
@@ -1556,7 +1567,6 @@
     toast('Veel plezier, ' + P.naam + '!');
   };
   function toonIk() {
-    $('pill-ik').style.display = P.naam ? '' : 'none';
     zetAvatar($('ik-avatar'), naam(), P.foto, true);
     $('ik-naam').textContent = naam();
   }

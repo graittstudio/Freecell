@@ -1,10 +1,11 @@
 {
-  "versie": "1.9.0",
+  "versie": "1.10.0",
   "nieuws": [
-    "Nieuw knopje 🌍 bovenin: hoeveel mensen dit spel spelen — nu, vandaag, deze week en in totaal. Het telt apparaten, geen namen: er gaat alleen een willekeurig nummer mee, geen naam, foto of tijden. Je hoeft er niet voor in een club te zitten.",
-    "Je gegevens veiligstellen: in Mijn menu kun je een kopie maken van je naam, foto, tijden, treden en doelen, en die later weer terugzetten. Handig als je van telefoon wisselt. Bijwerken van het spel raakte je gegevens al niet aan.",
-    "De tik-keuze is opnieuw nagemeten, nu op wat het spel zelf telt: hoeveel zetten je daarna nog nodig hebt. Op 179 keuzemomenten kost de huidige keuze gemiddeld 294 zetten, tegen 357 bij de versie van vorige week. Vooruitkijken is geprobeerd maar bleek op die maat slechter (338) en is er weer uit.",
-    "Hersteld: in de app deed \"uitdaging delen\" soms niets als het kopiëren naar het klembord mislukte. Nu verschijnt de tekst in een vakje dat je kunt kopiëren."
+    "Hamburgermenu linksboven, met dezelfde knop-animatie als onze andere apps: drie streepjes waarvan het middelste iets naar rechts staat, die bij het openen tot een kruisje draaien en bij het sluiten terugveren.",
+    "Daarmee is de balk bovenin opgeruimd: de losse knoppen voor instellingen, doelen, ranglijst, niveau en spelersteller zitten nu in dat ene menu. Wat overblijft is je score, tijd en zetten, met rechts je eigen avatar (die opent meteen je gegevens).",
+    "Onder de balk staat nu alleen nog informatie: niveau en trede, het spelnummer en je plek in de ranglijst.",
+    "De knoppen die je tijdens een potje nodig hebt — Nieuw, Ranglijst, Hint, Auto en Terug — blijven gewoon onderin staan.",
+    "Ons logo staat onderin het menu en brengt je naar graittstudio.com."
   ],
-  "apk": "FreeCell-1.9.0.apk"
+  "apk": "FreeCell-1.10.0.apk"
 }

@@ -334,3 +334,51 @@ textarea{width:100%;background:var(--paneel2);border:1px solid var(--rand);color
 .tellers span{display:block;font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
 .tellers small{font-size:11.5px;opacity:.65}
 #pill-spelers{font-variant-numeric:tabular-nums}
+
+/* ---------- De Knik: de hamburgerknop van het huis ----------
+   Rust: drie streepjes, het middelste staat 3 px naar rechts.
+   Openen: het middelste schuift terug in lijn en vervaagt, de andere twee
+   komen naar het midden en draaien tot een kruisje. Sluiten gaat andersom,
+   waarbij het middelste als laatste terugveert naar rechts. 220 ms. */
+.knik{width:42px;height:42px;border-radius:50%;border:2px solid var(--chrome-rand);background:var(--chrome);
+  cursor:pointer;flex:0 0 auto;position:relative;padding:0}
+.knik:active{transform:scale(.94)}
+.knik:focus-visible{outline:3px solid #7ce0ff;outline-offset:2px}
+.knik-lijn{position:absolute;left:50%;width:22px;height:2.5px;border-radius:2px;background:var(--tekst);
+  margin-left:-11px;transition:transform .22s cubic-bezier(.2,.7,.3,1),opacity .22s ease}
+.knik-lijn.boven{top:13px}
+.knik-lijn.midden{top:19.5px;transform:translateX(3px);transition-delay:0s}
+.knik-lijn.onder{top:26px}
+/* open: kruisje */
+.knik[aria-expanded="true"] .knik-lijn.midden{transform:translateX(0);opacity:0;transition-delay:0s}
+.knik[aria-expanded="true"] .knik-lijn.boven{transform:translateY(6.5px) rotate(45deg);transition-delay:.06s}
+.knik[aria-expanded="true"] .knik-lijn.onder{transform:translateY(-6.5px) rotate(-45deg);transition-delay:.06s}
+/* dicht: het middelste veert als laatste terug naar rechts */
+.knik[aria-expanded="false"] .knik-lijn.midden{transition-delay:.12s}
+@media (prefers-reduced-motion:reduce){
+  .knik-lijn{transition:none!important;transition-delay:0s!important}
+}
+
+/* ---------- menupaneel ---------- */
+.overlay.menu{align-items:flex-start;justify-content:flex-start;padding:0}
+.menupaneel{width:min(86vw,320px);max-height:100%;overflow:auto;background:var(--paneel);color:var(--tekst);
+  border-right:1px solid var(--rand);box-shadow:var(--schaduw);padding:calc(14px + env(safe-area-inset-top)) 12px 18px;
+  display:flex;flex-direction:column;gap:6px;animation:schuifIn .22s cubic-bezier(.2,.7,.3,1)}
+@keyframes schuifIn{from{transform:translateX(-18px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.menupaneel{animation:none}}
+.menu-item{display:flex;align-items:center;gap:12px;width:100%;text-align:left;text-decoration:none;
+  background:var(--paneel2);border:1px solid var(--rand);color:var(--tekst);border-radius:14px;
+  padding:13px 14px;font-size:15.5px;font-family:inherit;cursor:pointer}
+.menu-item:active{transform:scale(.99)}
+.menu-item:focus-visible{outline:3px solid #7ce0ff;outline-offset:2px}
+.menu-item .mi{font-size:19px;line-height:1}
+.menu-item .mi-tel{margin-left:auto;font-variant-numeric:tabular-nums;opacity:.75;font-size:14px}
+.menu-maker{margin-top:auto;padding-top:14px}
+.ik-knop{display:flex;align-items:center;justify-content:center;padding:0}
+.ik-knop .avatar.mini{width:28px;height:28px;font-size:12px}
+
+/* ---------- statusregel onder de balk ---------- */
+#subbar{gap:10px;align-items:center}
+.status{flex:0 0 auto;font-size:12.5px;opacity:.85;white-space:nowrap}
+.status.zacht{opacity:.6}
+.status:empty{display:none}

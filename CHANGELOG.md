@@ -4,6 +4,21 @@ Versienummer staat in `package.json` en wordt bij het bouwen overal ingevuld:
 in de app (versionName/versionCode), op de landingspagina en in de naam van de
 service-worker-cache.
 
+## 1.10.0 — 22 november 2026
+
+- Hamburgermenu linksboven, met dezelfde knop-animatie als onze andere apps:
+  drie streepjes waarvan het middelste iets naar rechts staat, die bij het
+  openen tot een kruisje draaien en bij het sluiten terugveren.
+- Daarmee is de balk bovenin opgeruimd: de losse knoppen voor instellingen,
+  doelen, ranglijst, niveau en spelersteller zitten nu in dat ene menu. Wat
+  overblijft is je score, tijd en zetten, met rechts je eigen avatar (die
+  opent meteen je gegevens).
+- Onder de balk staat nu alleen nog informatie: niveau en trede, het
+  spelnummer en je plek in de ranglijst.
+- De knoppen die je tijdens een potje nodig hebt — Nieuw, Ranglijst, Hint,
+  Auto en Terug — blijven gewoon onderin staan.
+- Ons logo staat onderin het menu en brengt je naar graittstudio.com.
+
 ## 1.9.0 — 22 november 2026
 
 - Nieuw knopje 🌍 bovenin: hoeveel mensen dit spel spelen — nu, vandaag, deze
