@@ -244,8 +244,8 @@
 
   /* Downloadteller: telt verschillende apparaten, niet het aantal kliks.
      Er wordt alleen een willekeurig nummer bewaard, verder niets. */
-  var TEL_URL = 'https://uiiydsfkwanrtkaxpnei.supabase.co/rest/v1/rpc/';
-  var TEL_KEY = 'sb_publishable_u3jqsU62TJdQ27RY3KM6ZQ_s9npAlrl';
+  var TEL_URL = 'https://ygivjkrxiohabepfpznm.supabase.co/rest/v1/rpc/';
+  var TEL_KEY = 'sb_publishable_ps0kou5cpn_Dm_Kir7_yuQ_Tv3gQPf3';
   function telRpc(naam, body) {
     return fetch(TEL_URL + naam, {
       method: 'POST', headers: { apikey: TEL_KEY, 'Content-Type': 'application/json' },
@@ -259,14 +259,14 @@
     el.innerHTML = n === 1 ? 'Eén iemand heeft de app al opgehaald.'
       : '<b>' + n + '</b> mensen hebben de app al opgehaald.';
   }
-  telRpc('download_aantal').then(toonTeller).catch(function () {});
+  telRpc('freecell_download_aantal').then(toonTeller).catch(function () {});
   document.getElementById('apk-knop').addEventListener('click', function () {
     var id = '';
     try {
       id = localStorage.getItem('fc.apparaat') || '';
       if (!id) { id = 'a' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36); localStorage.setItem('fc.apparaat', id); }
     } catch (e) { id = 'a' + Math.random().toString(36).slice(2, 12); }
-    telRpc('download_tel', { p_id: id }).then(toonTeller).catch(function () {});
+    telRpc('freecell_download_tel', { p_id: id }).then(toonTeller).catch(function () {});
   });
 
   var instellingen = {};

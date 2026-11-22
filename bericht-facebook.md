@@ -3,7 +3,7 @@
 Uitnodigingslink met haar clubcode erin — wie hierop klikt, komt vanzelf in haar
 ranglijst terecht:
 
-    https://paulirikx.github.io/freecell/?club=UHJ6C2
+    https://freecell.graittstudio.com/?club=SXFTQE
 
 ---
 
@@ -29,7 +29,7 @@ dat moment aan het spelen is. Ik sta nu bovenaan, maar dat komt vooral doordat
 er nog niemand anders meedoet. 😄
 
 Meedoen? Tik op de link, dan zit je meteen in mijn lijstje:
-👉 https://paulirikx.github.io/freecell/?club=UHJ6C2
+👉 https://freecell.graittstudio.com/?club=SXFTQE
 
 Spelen kan gewoon in je browser, ook op je telefoon. Liever een echte app op je
 scherm? Die staat gratis op dezelfde pagina.
@@ -47,7 +47,7 @@ Paul heeft er daarom zelf eentje gemaakt: gratis, geen reclame, geen account —
 en met een klok en een ranglijst, zodat we kunnen kijken wie de snelste is.
 
 Doe je mee? Deze link zet je meteen in mijn lijstje:
-https://paulirikx.github.io/freecell/?club=UHJ6C2
+https://freecell.graittstudio.com/?club=SXFTQE
 
 In je browser spelen mag, of zet de gratis app erop. Ik ben benieuwd wie mij
 eraf krijgt. 🃏
@@ -66,7 +66,7 @@ Er zit wel een klok in. En een ranglijst. Snelste tijd, minste zetten, hoogste
 score. Je ziet ook wie er op dat moment speelt.
 
 Denk je dat je sneller bent? Bewijs het:
-https://paulirikx.github.io/freecell/?club=UHJ6C2
+https://freecell.graittstudio.com/?club=SXFTQE
 
 ---
 
@@ -75,6 +75,6 @@ https://paulirikx.github.io/freecell/?club=UHJ6C2
 * De link werkt op telefoon, tablet en computer. Je hoeft niets te installeren.
 * Wie wél een app op zijn scherm wil: op dezelfde pagina staat een gratis
   download voor Android (voor de iPhone is er de knop "Zet op beginscherm").
-* Alleen wie deze link of de code **UHJ6C2** heeft, ziet jullie ranglijst.
+* Alleen wie deze link of de code **SXFTQE** heeft, ziet jullie ranglijst.
 * Er is geen account nodig; er wordt alleen bewaard welke naam iemand invult en
   welke tijden hij speelt.

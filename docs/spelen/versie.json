@@ -1,9 +1,8 @@
 {
-  "versie": "1.7.0",
+  "versie": "1.8.0",
   "nieuws": [
-    "Een tik zet de kaart nu echt op de beste plek. De vorige poging werkte met bedachte vuistregels en bleek bij nameten juist slechter dan de versie daarvoor: van de 36 beoordeelde keuzemomenten koos hij er maar 9 goed. Nu wordt elke mogelijke zet doorgerekend op een kopie van het bord en wint de stand die daarna het gunstigst is — dat is ongeveer twee keer zo vaak raak.",
-    "De grootste fout zat in het afstraffen van \"begraven\": een nette reeks van vijf kaarten ergens op leggen telde vijf keer zo zwaar als één kaart, terwijl zo'n reeks in één beweging weer weg kan. Daardoor schoof het spel reeksen naar lege kolommen in plaats van op de passende kaart.",
-    "Hoe dat is nagemeten staat in docs/tikkeuze.md, met het gereedschap in scripts/meten erbij."
+    "Samen spelen doet het weer. De database waar de clubranglijst op draaide was in september opgeruimd; die draait nu mee op het Supabase-project dat toch al door de andere apps wordt gedeeld, dus er komen geen kosten bij.",
+    "Een club maken, een code invoeren, de gezamenlijke ranglijst en \"wie speelt er nu\" werken weer. Oude clubcodes van voor september zijn verlopen: maak eenmalig een nieuwe club en deel die code."
   ],
-  "apk": "FreeCell-1.7.0.apk"
+  "apk": "FreeCell-1.8.0.apk"
 }

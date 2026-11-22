@@ -4,6 +4,15 @@ Versienummer staat in `package.json` en wordt bij het bouwen overal ingevuld:
 in de app (versionName/versionCode), op de landingspagina en in de naam van de
 service-worker-cache.
 
+## 1.8.0 — 22 november 2026
+
+- Samen spelen doet het weer. De database waar de clubranglijst op draaide was
+  in september opgeruimd; die draait nu mee op het Supabase-project dat toch al
+  door de andere apps wordt gedeeld, dus er komen geen kosten bij.
+- Een club maken, een code invoeren, de gezamenlijke ranglijst en "wie speelt er
+  nu" werken weer. Oude clubcodes van voor september zijn verlopen: maak eenmalig
+  een nieuwe club en deel die code.
+
 ## 1.7.0 — 21 november 2026
 
 - Een tik zet de kaart nu echt op de beste plek. De vorige poging werkte met

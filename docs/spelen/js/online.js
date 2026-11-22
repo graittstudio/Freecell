@@ -2,6 +2,8 @@
    online.js - de gedeelde ranglijst en "wie speelt er nu"
 
    Alles loopt via een paar databasefuncties met de clubcode als sleutel.
+   De functies heten freecell_* omdat dit Supabase-project gedeeld wordt met
+   andere apps; zo staat alles van dit spel netjes apart.
    Zonder code kom je nergens: de tabellen zelf staan dicht. De sleutel
    hieronder is de publieke sleutel van het project; die hoort in de app
    te staan en geeft alleen toegang tot precies deze functies.
@@ -11,8 +13,8 @@
    ============================================================ */
 var Online = (function () {
 
-  var URL = 'https://uiiydsfkwanrtkaxpnei.supabase.co';
-  var KEY = 'sb_publishable_u3jqsU62TJdQ27RY3KM6ZQ_s9npAlrl';
+  var URL = 'https://ygivjkrxiohabepfpznm.supabase.co';
+  var KEY = 'sb_publishable_ps0kou5cpn_Dm_Kir7_yuQ_Tv3gQPf3';
 
   function rpc(naam, body) {
     return fetch(URL + '/rest/v1/rpc/' + naam, {
@@ -31,7 +33,7 @@ var Online = (function () {
   return {
     /* Nieuwe club: geeft {code, naam} terug. */
     maakClub: function (naam) {
-      return rpc('club_maak', { p_naam: naam }).then(function (r) {
+      return rpc('freecell_club_maak', { p_naam: naam }).then(function (r) {
         var c = r && r[0];
         return c ? { code: c.uit_code, naam: c.uit_naam } : null;
       });
@@ -39,14 +41,14 @@ var Online = (function () {
 
     /* Bestaat deze code? Geeft {code, naam, leden} of null. */
     zoekClub: function (code) {
-      return rpc('club_zoek', { p_code: code }).then(function (r) {
+      return rpc('freecell_club_zoek', { p_code: code }).then(function (r) {
         var c = r && r[0];
         return c ? { code: c.uit_code, naam: c.uit_naam, leden: c.leden } : null;
       });
     },
 
     stuurScore: function (club, e) {
-      return rpc('score_stuur', {
+      return rpc('freecell_score_stuur', {
         p_code: club, p_speler_id: e.speler_id, p_naam: e.naam, p_tekst: e.tekst || '',
         p_tijd_ms: e.ms, p_zetten: e.moves, p_score: e.score, p_spel: e.deal,
         p_niveau: e.level, p_trede: e.rung, p_cellen: e.cells,
@@ -56,19 +58,19 @@ var Online = (function () {
 
     /* sortering: 'tijd' | 'zetten' | 'score' */
     top: function (club, sortering, niveau, spel) {
-      return rpc('scores_top', {
+      return rpc('freecell_scores_top', {
         p_code: club, p_sortering: sortering || 'tijd',
         p_niveau: niveau || null, p_spel: spel || null, p_limiet: 60
       });
     },
 
     ping: function (club, speler_id, naam, bezig, spel) {
-      return rpc('aanwezig_ping', {
+      return rpc('freecell_aanwezig_ping', {
         p_code: club, p_speler_id: speler_id, p_naam: naam,
         p_bezig: !!bezig, p_spel: spel || null
       });
     },
 
-    wieNu: function (club) { return rpc('aanwezig_nu', { p_code: club }); }
+    wieNu: function (club) { return rpc('freecell_aanwezig_nu', { p_code: club }); }
   };
 })();
