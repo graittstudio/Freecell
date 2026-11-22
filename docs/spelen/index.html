@@ -29,6 +29,7 @@
     <button class="pill" id="pill-level">Beginner &middot; trede 1</button>
     <button class="pill" id="pill-deal">Spel #1</button>
     <button class="pill" id="pill-rank">Ranglijst</button>
+    <button class="pill" id="pill-spelers" title="Hoeveel mensen spelen dit spel?">🌍 <span id="spelers-nu">–</span></button>
     <span class="pill ghost" id="pill-pb"></span>
   </div>
 
@@ -122,6 +123,20 @@
   </div>
 </div>
 
+<div class="overlay" id="ov-spelers">
+  <div class="sheet">
+    <h2>Wie spelen dit spel? <button class="x" data-close>&times;</button></h2>
+    <div class="tellers" id="tellers">
+      <div><span id="tel-nu">–</span><small>nu aan het spelen</small></div>
+      <div><span id="tel-vandaag">–</span><small>vandaag</small></div>
+      <div><span id="tel-week">–</span><small>deze week</small></div>
+      <div><span id="tel-totaal">–</span><small>in totaal</small></div>
+    </div>
+    <p class="fineprint">Dit telt apparaten, geen namen: het spel stuurt alleen een willekeurig nummer mee, geen
+      naam, geen foto en geen tijden. Je hoeft nergens voor in een club te zitten.</p>
+  </div>
+</div>
+
 <div class="overlay" id="ov-update">
   <div class="sheet">
     <h2>Nieuwe versie <span id="up-versie"></span></h2>
@@ -152,6 +167,22 @@
     </div>
     <p class="fineprint">Je naam en avatar staan bij je tijden in de ranglijst. Foto en tekst zijn optioneel en
       blijven op dit apparaat &mdash; er wordt niets verstuurd.</p>
+
+    <h3>Je gegevens veiligstellen</h3>
+    <p class="hintline">Je naam, foto, tijden, treden en doelen staan op dit apparaat. Een bijwerking van het
+      spel raakt daar niets van aan, maar met een kopie in je appjes of notities ben je ook veilig als je
+      telefoon kwijtraakt of je de app verwijdert.</p>
+    <div class="btnrow">
+      <button class="btn small2" id="btn-backup">Kopie maken</button>
+      <button class="btn small2" id="btn-herstel">Kopie terugzetten</button>
+    </div>
+    <div id="herstel-vak" style="display:none">
+      <textarea id="herstel-tekst" rows="4" placeholder="Plak hier de gekopieerde regels"></textarea>
+      <div class="btnrow">
+        <button class="btn primary small2" id="btn-herstel-doe">Terugzetten</button>
+        <button class="btn small2" id="btn-herstel-af">Laat maar</button>
+      </div>
+    </div>
 
     <h3>Licht of donker</h3>
     <div class="chips" id="set-thema"></div>

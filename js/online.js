@@ -71,6 +71,14 @@ var Online = (function () {
       });
     },
 
-    wieNu: function (club) { return rpc('freecell_aanwezig_nu', { p_code: club }); }
+    wieNu: function (club) { return rpc('freecell_aanwezig_nu', { p_code: club }); },
+
+    /* Hoeveel mensen spelen dit spel? Geen namen, alleen aantallen. Dit
+       werkt los van de clubs: iedereen telt mee. */
+    tel: function (speler_id) {
+      return rpc('freecell_speler_ping', { p_id: speler_id }).then(function (r) {
+        return (r && r[0]) || null;
+      });
+    }
   };
 })();

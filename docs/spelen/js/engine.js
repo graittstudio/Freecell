@@ -303,6 +303,12 @@ var Eng = (function () {
     return w;
   }
 
+  /* Vooruitkijken is geprobeerd en weer verwijderd (22-11-2026).
+     Een beam-zoektocht van tien zetten diep koos vaker de plek waar het
+     bord "makkelijker" van werd, maar kostte in echte potjes juist meer
+     zetten: 338 tegen 288 gemiddeld. Omdat het spel op zetten en punten
+     telt, is de eenvoudige waardering beter. Zie TIKKEUZE.md. */
+
   /* Beste doel voor een tik. Een vrije cel telt alleen mee als erom
      gevraagd wordt (de tweede tik). */
   function autoTarget(st, src, metCel) {
@@ -317,23 +323,29 @@ var Eng = (function () {
       if (canMove(st, src, d) && isSafe(st, c)) return d;
     }
 
-    var best = null, bestW = -1e8;
-    function weeg(dst) {
-      if (!canMove(st, src, dst)) return;
-      var na = clone(st);
-      if (!apply(na, src, dst)) return;
-      var w = bordWaarde(na);
-      if (dst.kind === 'found') w += 8;                     // bij twijfel liever afleggen
-      if (src.kind === 'free') w += 15;                     // een cel leegmaken is prettig
-      if (w > bestW) { bestW = w; best = dst; }
+    // eerst kijken welke plekken er zijn; bij één plek valt er niets te kiezen
+    var kandidaten = [];
+    if (cards.length === 1) {
+      d = { kind: 'found', i: suit(c) };
+      if (canMove(st, src, d)) kandidaten.push(d);
     }
-
-    if (cards.length === 1) weeg({ kind: 'found', i: suit(c) });
     for (i = 0; i < 8; i++) {
       if (src.kind === 'col' && src.i === i) continue;
       // een hele kolom naar een lege kolom verhuizen levert niets op
       if (!st.cols[i].length && src.kind === 'col' && st.cols[src.i].length === cards.length) continue;
-      weeg({ kind: 'col', i: i });
+      d = { kind: 'col', i: i };
+      if (canMove(st, src, d)) kandidaten.push(d);
+    }
+    if (kandidaten.length === 1) return kandidaten[0];
+
+    var best = null, bestW = -1e8, k, na, w;
+    for (k = 0; k < kandidaten.length; k++) {
+      na = clone(st);
+      if (!apply(na, src, kandidaten[k])) continue;
+      w = bordWaarde(na);
+      if (kandidaten[k].kind === 'found') w += 8;           // bij twijfel liever afleggen
+      if (src.kind === 'free') w += 15;                     // een cel leegmaken is prettig
+      if (w > bestW) { bestW = w; best = kandidaten[k]; }
     }
     if (best) return best;
 

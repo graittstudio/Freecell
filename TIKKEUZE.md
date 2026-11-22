@@ -57,3 +57,39 @@ vorige versie.
 
 `docs/` is in dit project de webversie en wordt bij elke bouw leeggegooid --
 documentatie hoort dus hier in de hoofdmap.
+
+
+## Tweede ronde (22 november 2026): meten op zetten
+
+Paul gaf een scherpere maatstaf: de zet moet gaan naar de plek die het meeste
+oplevert *in wat het spel telt* — zetten, punten, afgelegde kaarten. De eerste
+meetlat ("hoeveel werk kost het de solver nog") is daar een omweg voor.
+
+Daarom opnieuw gemeten, nu op **hoeveel zetten er na de keuze nog nodig zijn
+om te winnen**, over 179 keuzemomenten uit echte potjes:
+
+| manier van kiezen | kiest de kortste | zetten daarna |
+|---|---|---|
+| 1.6.0 (vuistregels) | 93 van de 179 | 357 |
+| 1.7.0 / nu (waardering) | 95 van de 179 | **294** |
+| met vooruitkijken (beam, 10 diep) | 95 van de 179 | 338 |
+| perfect gekozen | 179 van de 179 | 243 |
+
+Daar volgen drie dingen uit:
+
+1. **Vooruitkijken maakt het slechter.** Op de eerste meetlat leek een
+   beam-zoektocht beter (26 van de 39 tegen 18), maar op zetten gemeten kost
+   hij er juist meer. Hij is daarom weer verwijderd — dat scheelt ook 90 ms
+   per tik.
+2. **Verder afstellen levert niets op.** Alle 972 doorgerekende combinaties
+   van gewichten komen uit op 294 zetten of slechter.
+3. **Het gewicht van "afleggen" doet niets** bij een keuze tussen twee
+   kolommen: de aflegstapel verandert daar immers niet van.
+
+Het verschil tussen de beste en de slechtste plek is gemiddeld 193 zetten en
+liep in het ergste geval op tot 4101. Een tik op de verkeerde plek kost dus
+echt wat.
+
+    node scripts/meten/oplevering.cjs        # meet zetten-tot-winst per plek
+    node scripts/meten/zetten-vergelijk.cjs  # versies naast elkaar
+    node scripts/meten/raster-zetten.cjs     # zoekt betere gewichten

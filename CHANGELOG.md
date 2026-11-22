@@ -4,6 +4,23 @@ Versienummer staat in `package.json` en wordt bij het bouwen overal ingevuld:
 in de app (versionName/versionCode), op de landingspagina en in de naam van de
 service-worker-cache.
 
+## 1.9.0 — 22 november 2026
+
+- Nieuw knopje 🌍 bovenin: hoeveel mensen dit spel spelen — nu, vandaag, deze
+  week en in totaal. Het telt apparaten, geen namen: er gaat alleen een
+  willekeurig nummer mee, geen naam, foto of tijden. Je hoeft er niet voor in
+  een club te zitten.
+- Je gegevens veiligstellen: in Mijn menu kun je een kopie maken van je naam,
+  foto, tijden, treden en doelen, en die later weer terugzetten. Handig als je
+  van telefoon wisselt. Bijwerken van het spel raakte je gegevens al niet aan.
+- De tik-keuze is opnieuw nagemeten, nu op wat het spel zelf telt: hoeveel
+  zetten je daarna nog nodig hebt. Op 179 keuzemomenten kost de huidige keuze
+  gemiddeld 294 zetten, tegen 357 bij de versie van vorige week. Vooruitkijken
+  is geprobeerd maar bleek op die maat slechter (338) en is er weer uit.
+- Hersteld: in de app deed "uitdaging delen" soms niets als het kopiëren naar
+  het klembord mislukte. Nu verschijnt de tekst in een vakje dat je kunt
+  kopiëren.
+
 ## 1.8.0 — 22 november 2026
 
 - Samen spelen doet het weer. De database waar de clubranglijst op draaide was

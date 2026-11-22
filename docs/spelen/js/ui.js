@@ -787,6 +787,37 @@
     return (n >= 1 && n <= 1000000) ? n : null;
   }
 
+  /* ---------------- hoeveel mensen spelen dit? ---------------- */
+  var spelers = { nu: null, vandaag: null, week: null, totaal: null, moment: 0 };
+
+  function telSpelers(force) {
+    if (!force && Date.now() - spelers.moment < 120000) return Promise.resolve();
+    spelers.moment = Date.now();
+    return Online.tel(P.id).then(function (r) {
+      if (!r) return;
+      spelers.nu = r.nu; spelers.vandaag = r.vandaag; spelers.week = r.week; spelers.totaal = r.totaal;
+      toonSpelers();
+    }).catch(function () { /* geen internet: knop blijft gewoon leeg */ });
+  }
+
+  function toonSpelers() {
+    var pil = $('pill-spelers');
+    if (spelers.nu === null) { pil.style.display = 'none'; return; }
+    pil.style.display = '';
+    $('spelers-nu').textContent = spelers.nu;
+    $('tel-nu').textContent = spelers.nu;
+    $('tel-vandaag').textContent = spelers.vandaag;
+    $('tel-week').textContent = spelers.week;
+    $('tel-totaal').textContent = spelers.totaal;
+  }
+
+  $('pill-spelers').onclick = function () {
+    telSpelers(true);
+    open('ov-spelers');
+  };
+  setInterval(function () { if (!document.hidden) telSpelers(false); }, 120000);
+  setTimeout(function () { telSpelers(true); }, 2000);
+
   /* ---------------- club: samen spelen ---------------- */
   var online = { lijst: [], geladen: 0, bezig: false, fout: '' };
 
@@ -844,8 +875,9 @@
     var tekst = 'Doe mee met FreeCell! Onze code is ' + S.club + '.';
     if (navigator.share) navigator.share({ title: 'FreeCell', text: tekst, url: url }).catch(function () {});
     else if (navigator.clipboard) navigator.clipboard.writeText(tekst + ' ' + url)
-      .then(function () { toast('Uitnodiging gekopieerd'); });
-    else prompt('Deel deze uitnodiging:', tekst + ' ' + url);
+      .then(function () { toast('Uitnodiging gekopieerd'); },
+            function () { toonOmTeKopieren(tekst + ' ' + url, 'Kopieer deze uitnodiging'); });
+    else toonOmTeKopieren(tekst + ' ' + url, 'Kopieer deze uitnodiging');
   };
 
   /* Laat de club weten dat je er bent (en of je aan het spelen bent). */
@@ -1100,6 +1132,78 @@
              ['wine', 'Bordeaux', '#5b1226'], ['sunset', 'Zonsondergang', '#e0577f'], ['mono', 'Grijs', '#22262b']];
   var DECKS = [['classic', 'Klassiek'], ['pips', 'Volledige kaarten *'], ['four', 'Vier kleuren'],
                ['big', 'Groot & simpel'], ['night', 'Donker']];
+
+  /* ---- je gegevens veiligstellen -----------------------------------------
+     Alles staat in de opslag van de browser onder sleutels die met fc.
+     beginnen. Een kopie is gewoon die hele verzameling als tekst; die kun je
+     in een appje of notitie bewaren en later terugplakken. */
+  var FC_SLEUTELS = ['fc.profiel', 'fc.scores', 'fc.stats', 'fc.goals', 'fc.ladder', 'fc.settings', 'fc.game'];
+
+  function maakKopie() {
+    var alles = { versie: Store.VERSION, gemaakt: new Date().toISOString(), gegevens: {} };
+    FC_SLEUTELS.forEach(function (k) {
+      var v = null;
+      try { v = localStorage.getItem(k); } catch (e) {}
+      if (v !== null) alles.gegevens[k] = v;
+    });
+    return JSON.stringify(alles);
+  }
+
+  $('btn-backup').onclick = function () {
+    var tekst = maakKopie();
+    var kb = Math.max(1, Math.round(tekst.length / 1024));
+    function gelukt() { toast('Kopie gekopieerd (' + kb + ' kB) — plak hem in een appje of notitie'); }
+    if (navigator.share) {
+      navigator.share({ title: 'FreeCell back-up', text: tekst })
+        .then(function () { toast('Kopie gedeeld'); })
+        .catch(function () { naarKlembord(tekst, gelukt); });
+    } else naarKlembord(tekst, gelukt);
+  };
+  /* Lukt het klembord niet (dat kan in de app), dan zetten we de tekst in
+     het vak eronder: selecteren en kopiëren kan altijd. prompt() werkt hier
+     niet, die wordt door de app geblokkeerd. */
+  function toonOmTeKopieren(tekst, melding) {
+    $('herstel-vak').style.display = '';
+    $('herstel-tekst').value = tekst;
+    $('herstel-tekst').select();
+    renderIk();
+    open('ov-ik');
+    toast(melding || 'Kopieer deze tekst');
+  }
+
+  function naarKlembord(tekst, gelukt) {
+    function inVak() {
+      $('herstel-vak').style.display = '';
+      $('herstel-tekst').value = tekst;
+      $('herstel-tekst').select();
+      toast('Kopieer deze regels en bewaar ze in een appje of notitie');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(tekst).then(gelukt, inVak);
+    } else inVak();
+  }
+
+  $('btn-herstel').onclick = function () {
+    $('herstel-vak').style.display = '';
+    $('herstel-tekst').value = '';
+    $('herstel-tekst').focus();
+  };
+  $('btn-herstel-af').onclick = function () { $('herstel-vak').style.display = 'none'; };
+  $('btn-herstel-doe').onclick = function () {
+    var ruw = $('herstel-tekst').value.trim();
+    if (!ruw) { toast('Plak eerst de gekopieerde regels'); return; }
+    var pak;
+    try { pak = JSON.parse(ruw); } catch (e) { toast('Dat lijkt geen FreeCell-kopie'); return; }
+    if (!pak || !pak.gegevens) { toast('Dat lijkt geen FreeCell-kopie'); return; }
+    if (!confirm('Je huidige naam, tijden en voortgang worden vervangen door de kopie van ' +
+        (pak.gemaakt || '').slice(0, 10) + '. Doorgaan?')) return;
+    Object.keys(pak.gegevens).forEach(function (k) {
+      if (FC_SLEUTELS.indexOf(k) === -1) return;          // alleen onze eigen sleutels
+      try { localStorage.setItem(k, pak.gegevens[k]); } catch (e) {}
+    });
+    toast('Kopie teruggezet — het spel start opnieuw op');
+    setTimeout(function () { location.reload(); }, 1200);
+  };
 
   var THEMAS = [['auto', 'Volg mijn telefoon'], ['licht', 'Licht'], ['donker', 'Donker']];
   function renderIk() {

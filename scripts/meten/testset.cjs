@@ -16,10 +16,10 @@ function doelen(st,src){const d=[],ka=Eng.cardsOf(st,src);if(ka.length===1){cons
 
 const set = [];
 const gezienMoment = new Set();
-for (let n = 0; n < 200 && set.length < 45; n++) {
+for (let n = 0; n < 900 && set.length < 140; n++) {
   let st = Eng.create(500 + n * 97, 4);
   const standenGezien = new Set();
-  for (let stap = 0; stap < 45 && set.length < 45; stap++) {
+  for (let stap = 0; stap < 45 && set.length < 140; stap++) {
     const sl = sleutel(st);
     if (standenGezien.has(sl)) break;                 // bestMove loopt rond: stoppen
     standenGezien.add(sl);
@@ -49,7 +49,7 @@ for (let n = 0; n < 200 && set.length < 45; n++) {
     if (Eng.won(st)) break;
   }
 }
-fs.writeFileSync(TMP + '/keuzeset.json', JSON.stringify(set));
+fs.writeFileSync(TMP + '/keuzeset-groot.json', JSON.stringify(set));
 console.log('keuzemomenten in de testset: ' + set.length);
 const soorten = { 'afleg erbij': 0, 'alleen kolommen': 0, 'met lege kolom': 0 };
 set.forEach(k => {
