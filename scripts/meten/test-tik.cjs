@@ -48,14 +48,14 @@ console.log('\n1. Een kaart die veilig weg kan, gaat altijd naar de aflegstapel'
   toets('♥2 aangetikt', waarheen(st, { kind: 'col', i: 0, idx: 1 }), 'aflegstapel');
 }
 
-console.log('\n2. Past nergens, geen lege kolom: eerst niets, pas na een tweede tik de cel');
+console.log('\n2. Past nergens, geen lege kolom: alleen met de cel-vlag komt de vrije cel in beeld');
 {
   const st = stand([
     [kaart('k', 13), kaart('h', 6)],
     [kaart('s', 2)], [kaart('r', 3)], [kaart('k', 4)], [kaart('h', 11)], [kaart('s', 9)], [kaart('h', 10)], [kaart('k', 9)]
   ]);
-  toets('eerste tik', waarheen(st, { kind: 'col', i: 0, idx: 1 }), 'NERGENS');
-  toets('tweede tik', waarheen(st, { kind: 'col', i: 0, idx: 1 }, true), 'vrije cel 1');
+  toets('zonder cel-vlag', waarheen(st, { kind: 'col', i: 0, idx: 1 }), 'NERGENS');
+  toets('met cel-vlag', waarheen(st, { kind: 'col', i: 0, idx: 1 }, true), 'vrije cel 1');
 }
 
 console.log('\n3. Een kolom die uit één kaart bestaat, verhuist niet naar een lege kolom');

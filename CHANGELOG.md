@@ -4,6 +4,12 @@ Versienummer staat in `package.json` en wordt bij het bouwen overal ingevuld:
 in de app (versionName/versionCode), op de landingspagina en in de naam van de
 service-worker-cache.
 
+## 1.10.1 - 22 november 2026
+
+- Een kaart die alleen nog naar een vrije cel kan, gaat daar nu bij de eerste
+  tik heen. Eerder schudde hij eerst en moest je nog een keer tikken om te
+  bevestigen; die extra stap is eruit.
+
 ## 1.10.0 — 22 november 2026
 
 - Hamburgermenu linksboven, met dezelfde knop-animatie als onze andere apps:

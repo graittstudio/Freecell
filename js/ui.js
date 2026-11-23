@@ -495,7 +495,7 @@
   }
 
   /* ---------------- klikken en slepen ---------------- */
-  var drag = null, tapInfo = { t: 0, card: -1 }, parkeer = { kaart: -1, t: 0 };
+  var drag = null, tapInfo = { t: 0, card: -1 };
 
   /* Kaart even laten schudden: hij gaat niet, maar je ziet dat hij je zag. */
   function schud(c) {
@@ -599,24 +599,15 @@
     }
     tapInfo = { t: now, card: c0 };
     var dst = Eng.autoTarget(st, d.src);
-    if (dst) { parkeer = { kaart: -1, t: 0 }; doMove(d.src, dst); return; }
+    if (dst) { doMove(d.src, dst); return; }
 
-    /* Niets op tafel en niets af te leggen. Vroeger schoof het spel de kaart
-       dan zelf in een vrije cel -- precies de zet waar je later spijt van
-       hebt. Nu vraagt hij het eerst. */
+    /* Niets op tafel en niets af te leggen: dan de vrije cel, meteen.
+       Eerder vroeg het spel daar nog om bevestiging (tik twee keer); dat
+       kostte alleen maar een extra tik, dus die stap is eruit. */
     var cel = Eng.autoTarget(st, d.src, true);
-    if (cel && parkeer.kaart === c0 && now - parkeer.t < 3000) {
-      parkeer = { kaart: -1, t: 0 };
-      doMove(d.src, cel);
-      return;
-    }
+    if (cel) { doMove(d.src, cel); return; }
     schud(c0);
-    if (cel) {
-      parkeer = { kaart: c0, t: now };
-      toast('Deze kan nergens heen. Tik nog eens om hem in een vrije cel te parkeren.');
-    } else {
-      sfx.bad();
-    }
+    sfx.bad();
   }
 
   $('board').addEventListener('pointerdown', onDown);
